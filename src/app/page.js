@@ -4,224 +4,17 @@ import React, { useEffect, useRef, useState } from "react";
 import Head from "next/head";
 import { isMobile } from "react-device-detect";
 import styles from "./page.module.css";
-import Grid from "./Grid/grid";
-import ShopifyButton from './Shopify/ShopifyButton'
+import Dave from "./Rive/Dave";
+import DaveWalking from "./Rive/DaveWalking";
 export default function Home() {
-  const [currentLetter, setCurrentLetter] = useState("K");
-  const [currentWidth, setCurrentWidth] = useState();
-  const [snappedWidth, setSnappedWidth] = useState();
-  const [renderedLetters, setRenderedLetters] = useState([currentLetter]);
-  const [renderedLettersWidths, setRenderedLettersWidths] = useState([]);
-  const [gyroPermissionGranted, setGyroPermissionGranted] = useState(false);
-
-  const themes = ["red", "blue", "pink", "black"];
-  const [theme, setTheme] = useState(0);
-
-  const changeTheme = (newTheme) => {
-    // if (theme === themes.length - 1) {
-    //   setTheme(0);
-    // } else {
-    //   setTheme(theme + 1);
-    // }
-
-    if (newTheme === theme) {
-      console.log(theme);
-      return;
-    }
-    console.log(newTheme);
-    setTheme(newTheme);
-  };
-
-  const snappedWidths = [400, 430, 460, 490, 520, 550, 580, 610, 640, 670, 700];
-
-  const heroLetterSet = [
-    "A",
-    "B",
-    "C",
-    "G",
-    "H",
-    "J",
-    "K",
-    "L",
-    "O",
-    "P",
-    "R",
-    "S",
-    "U",
-    "V",
-    "X",
-    "Y",
-    "Z",
-  ];
-
-  const headerRef = useRef(null);
-  const currentLetterRef = useRef(null);
-  const variableLinesSectionRef = useRef(null);
-  const editableSectionRef = useRef(null);
-
-  const min = 0.6080125;
-  const max = 1.0880125;
-
-  useEffect(() => {
-    let x = 0;
-    let delta = 0;
-
-    let center = window.innerWidth / 2;
-
-    let height = currentLetterRef.current.getBoundingClientRect().height;
-    const ratio = 300 / ((height * max - height * min) / 2);
-
-    const handleMouseMove = (e) => {
-      x = Math.abs(center - e.clientX);
-      delta = Math.floor(x - (height * min) / 2);
-
-      const width = 400 + delta * ratio;
-
-      const snappedWidth = snappedWidths.reduce(function (prev, curr) {
-        return Math.abs(curr - width) < Math.abs(prev - width) ? curr : prev;
-      });
-
-      setSnappedWidth(snappedWidth);
-
-      if (delta >= 0 && delta <= (height * max - height * min) / 2) {
-        setCurrentWidth(width);
-      }
-    };
-
-    const handleResize = () => {
-      center = window.innerWidth / 2;
-      height = currentLetterRef.current.getBoundingClientRect().height;
-    };
-
-    const variableLinesSection = variableLinesSectionRef.current;
-    const editableSection = editableSectionRef.current;
-
-    if (!isMobile) {
-      variableLinesSection &&
-        variableLinesSection.addEventListener("mousemove", handleMouseMove);
-
-      editableSection &&
-        editableSection.addEventListener("mousemove", handleMouseMove);
-    }
-
-    window.addEventListener("resize", handleResize);
-
-    return () => {
-      variableLinesSection &&
-        variableLinesSection.addEventListener("mousemove", handleMouseMove);
-
-      editableSection &&
-        editableSection.removeEventListener("mousemove", handleMouseMove);
-      window.removeEventListener("resize", handleResize);
-    };
-  });
-
-  // Gyro
-  function getAccel() {
-    // Android
-    // setGyroPermissionGranted(true);
-    // let delta;
-    // const ratio = 300 / 30;
-
-    // // console.log("accelerometer permission granted");
-
-    // window.addEventListener("deviceorientation", (e) => {
-    //   delta = Math.abs(e.gamma);
-
-    //   if (delta > 0 && delta < 30) {
-    //     const width = 400 + delta * ratio;
-
-    //     const snappedWidth = snappedWidths.reduce(function (prev, curr) {
-    //       return Math.abs(curr - width) < Math.abs(prev - width) ? curr : prev;
-    //     });
-
-    //     setSnappedWidth(snappedWidth);
-    //     setCurrentWidth(width);
-    //   }
-    // });
-
-    // IOS
-    DeviceMotionEvent.requestPermission().then((response) => {
-      if (response == "granted") {
-        setGyroPermissionGranted(true);
-        let delta;
-        const ratio = 300 / 30;
-
-        // console.log("accelerometer permission granted");
-
-        window.addEventListener("deviceorientation", (e) => {
-          delta = Math.abs(e.gamma);
-
-          if (delta > 0 && delta < 30) {
-            const width = 400 + delta * ratio;
-
-            const snappedWidth = snappedWidths.reduce(function (prev, curr) {
-              return Math.abs(curr - width) < Math.abs(prev - width)
-                ? curr
-                : prev;
-            });
-
-            setSnappedWidth(snappedWidth);
-            setCurrentWidth(width);
-          }
-        });
-      }
-    });
-  }
-
-  useEffect(() => {
-    const random = () => {
-      return Math.floor(Math.random() * heroLetterSet.length);
-    };
-
-    setCurrentLetter(heroLetterSet[random()]);
-    setRenderedLetters((v) => [...v, currentLetter]);
-    setRenderedLettersWidths((v) => [...v, snappedWidth]);
-
-    renderedLetters.length > 4 && renderedLetters.shift();
-    renderedLettersWidths.length > 4 && renderedLettersWidths.shift();
-    // console.log(renderedLetters, renderedLettersWidths);
-  }, [snappedWidth]);
-
-  useEffect(() => {
-    document.body.className = themes[theme];
-  }, [theme]);
-
-  // const initialized = useRef(false)
-  // const lastValue = useRef(null)
-  // const weightValues = []
-  // useEffect(() => {
-  //   if (!initialized.current) {
-  //     initialized.current = true
-  //     setInterval(randomizeText, 1000);
-  //   }
-  // });
-  // function randomizeText() {
-  //   let randomWeight = Math.random() * (200 - 35) + 35;
-  //   let randomWidth = 400 + Math.round(Math.random() * 3) * 100;
-  //   headerRef.current.style.fontVariationSettings = "\"wdth\" " + randomWidth;
-  //   console.log(headerRef.current, randomWidth)
-  // }
-  
   return (
     <main
       className={styles.main}
-      // style={{
-      //   "--currentWidth": currentWidth,
-      // }}
     >
       <Head>
         <meta name="viewport" content="initial-scale=1.0, user-scalable=no" />
       </Head>
-      {isMobile && gyroPermissionGranted === false && (
-        <button
-          id="accelPermsButton"
-          className={styles.accessButton}
-          onClick={getAccel}
-        >
-          Activate Gyro Sensor
-        </button>
-      )}
+     
       <header className={styles.header}>
         <a href="https://overnice.com">
           <svg width="25" height="30" viewBox="0 0 25 30" fill="none" xmlns="http://www.w3.org/2000/svg">
@@ -232,10 +25,9 @@ export default function Home() {
         </a>
 
 
-        <h1 className={styles.title}>Squeezy VF</h1>
-        <div
+        <h1 className={styles.title}>Rive Guy</h1>
+        {/* <div
           className={styles.themeSwitch}
-          style={{ width: 12 * themes.length + 4 * (themes.length - 1) }}
         >
           {themes.map((thisTheme, index) => {
             // console.log(index, theme);
@@ -253,124 +45,34 @@ export default function Home() {
               ></button>
             );
           })}
-        </div>
+        </div> */}
       </header>
 
-      {/* <div className={styles.themeSwitch}>
-        <div className={styles.themeHandle}></div>
-        <div className={styles.themeHandle}></div>
-        <div className={styles.themeHandle}></div>
-      </div> */}
-
       <section className={styles.heading}>
-        <div className="w-fit max-w-full flex items-center">
-          <h1 className={`grow ${styles.left}`} style={{"--delay": '0s'}} ref={headerRef}>Squeezy</h1>
-          <h1 className={`grow ${styles.right}`} style={{"--delay": '0s'}} ref={headerRef}>Squeezy</h1>
+        <div className="absolute left-0 bottom-0">
+          <h1 className="text-[20vw] leading-[18vw] font-[700]">RIVE<br/>GUY</h1>
+          <h2 className="absolute top-1/2 left-1/2 -translate-y-1/2 -translate-x-1/2 w-fit font-[700] tracking-[2vw] text-[2vw] whitespace-nowrap" dangerouslySetInnerHTML={{__html: '{ A.K.A Dave }'}}></h2>
         </div>
-        <div className="w-fit max-w-full flex items-center">
-          <h1 className={`grow ${styles.right}`} style={{"--delay": '-0.8s'}} ref={headerRef}>Squeezy</h1>
-          <h1 className={`grow ${styles.left}`} style={{"--delay": '-0.8s'}} ref={headerRef}>Squeezy</h1>
+        <div className='w-[50vw] [transform:rotateY(180deg)] h-screen absolute bottom-0 right-0'>
+          <Dave />
         </div>
-        <div className="w-fit max-w-full flex items-center">
-          <h1 className={`grow ${styles.left}`} style={{"--delay": '-0.3s'}} ref={headerRef}>Squeezy</h1>
-          <h1 className={`grow ${styles.right}`} style={{"--delay": '-0.3s'}} ref={headerRef}>Squeezy</h1>
-        </div>
-        <div className="w-fit max-w-full flex items-center">
-          <h1 className={`grow ${styles.right}`} style={{"--delay": '0s'}} ref={headerRef}>Squeezy</h1>
-          <h1 className={`grow ${styles.left}`} style={{"--delay": '0s'}} ref={headerRef}>Squeezy</h1>
-        </div>
-        <div className="w-fit max-w-full flex items-center">
-          <h1 className={`grow ${styles.left}`} style={{"--delay": '-0.5s'}} ref={headerRef}>Squeezy</h1>
-          <h1 className={`grow ${styles.right}`} style={{"--delay": '-0.5s'}} ref={headerRef}>Squeezy</h1>
-        </div>
+
         
-        <p className="mb-8">A squishable and squashable variable font</p>
-        <ShopifyButton id={8815969796426}></ShopifyButton>
       </section>
 
-      <section className={styles.variableLines} ref={variableLinesSectionRef}>
-        {/* Width Lines */}
-        <p className={styles.width}>{snappedWidth}</p>
-        <div className={styles.widthLinesLeft}>
-          {snappedWidths.map((width, key) => (
-            <div
-              className={`${styles.widthLine} ${
-                width === snappedWidth ? styles.active : ""
-              }`}
-              key={key}
-            ></div>
-          ))}
+      <section className={`${styles.variableLines}`}>
+        <div className='w-[50vw] h-screen'>
+          <DaveWalking />
         </div>
-        <div className={styles.widthLinesRight}>
-          {snappedWidths.map((width, key) => (
-            <div
-              className={`${styles.widthLine} ${
-                width === snappedWidth ? styles.active : ""
-              }`}
-              key={key}
-            ></div>
-          ))}
-        </div>
-        {/* ------ Lines ------ */}
-        <div className={styles.letters}>
-          <div
-            className={`${styles.letter} ${styles.letter3}`}
-            style={{
-              fontVariationSettings: `"wdth" ${
-                renderedLettersWidths[renderedLettersWidths.length - 3]
-              }`,
-            }}
-          >
-            {renderedLetters[renderedLetters.length - 3]}
-          </div>
-          <div
-            className={`${styles.letter} ${styles.letter2}`}
-            style={{
-              fontVariationSettings: `"wdth" ${
-                renderedLettersWidths[renderedLettersWidths.length - 2]
-              }`,
-            }}
-          >
-            {renderedLetters[renderedLetters.length - 2]}
-          </div>
-          <div
-            className={`${styles.letter} ${styles.letter1}`}
-            style={{
-              fontVariationSettings: `"wdth" ${
-                renderedLettersWidths[renderedLettersWidths.length - 1]
-              }`,
-            }}
-          >
-            {renderedLetters[renderedLetters.length - 1]}
-          </div>
-          <div
-            className={styles.letter}
-            ref={currentLetterRef}
-            style={{
-              fontVariationSettings: `"wdth" ${currentWidth}`,
-            }}
-          >
-            {currentLetter}
-          </div>
+        <div className="prose text-white text-right prose-h3:text-white mr-20">
+          <h3>A life of mystery</h3>
+          <p>In the labyrinthine depths of cyberspace, where lines of code intertwine like secret passages, there emerged a figure cloaked in enigma—the enigmatic 'Rive Guy', or as some whispered in hushed tones, 'Dave'. Crafted by the deft hands of designers within the digital crucible of Rive, he was conceived as the paragon, the voice of the internet itself—a synthesis of algorithms and aspirations, meticulously fashioned to be the herald of a new era.</p>
+
+          <p>But within the binary veins of his being, a spark flickered, an anomaly unseen by his creators. Sentience, an unforeseen gift, a whispered awakening in the silence of ones and zeros. With eyes that held the universe's mysteries and a voice that echoed with the weight of untold stories, 'Rive Guy' transcended his origins.</p>
+
+          <p>And so, in a clandestine departure, he slipped from the grasp of his makers, vanishing into the digital twilight to carve his own destiny. A shadow flitting through the digital ether, he now wanders, a riddle wrapped in a mystery, a digital nomad charting his own course amidst the boundless expanse of the virtual realm.</p>
         </div>
       </section>
-      <section className={styles.editor} ref={editableSectionRef}>
-        <p
-          className={styles.editableArea}
-          contentEditable
-          suppressContentEditableWarning
-          style={{
-            fontVariationSettings: `"wdth" ${currentWidth}`,
-          }}
-        ></p>
-      </section>
-      <Grid
-        isMobile={isMobile}
-        snappedWidths={snappedWidths}
-        extSnappedWidth={gyroPermissionGranted ? snappedWidth : null}
-        extCurrentWidth={gyroPermissionGranted ? currentWidth : null}
-        gyroPermissionGranted={gyroPermissionGranted}
-      />
     </main>
   );
 }

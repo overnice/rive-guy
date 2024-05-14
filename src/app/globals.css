@@ -50,15 +50,15 @@
   --black-foreground-shade-20: #1a1a1a;
   --black-foreground-shade-10: #0d0d0d;
 
-  --background: var(--red-background);
-  --foreground: var(--red-foreground);
-  --foreground-shade-30: var(--red-foreground-shade-30);
-  --foreground-shade-20: var(--red-foreground-shade-20);
-  --foreground-shade-10: var(--red-foreground-shade-10);
+  --background: var(--black-background);
+  --foreground: var(--black-foreground);
+  --foreground-shade-30: var(--black-foreground-shade-30);
+  --foreground-shade-20: var(--black-foreground-shade-20);
+  --foreground-shade-10: var(--black-foreground-shade-10);
 }
 
 body {
-  font-family: 'TT_Neoris, sans-serif';
+  font-family: 'TT_Neoris';
   font-feature-settings: 'ss05' on;
   -webkit-font-smoothing: antialiased;
   -moz-osx-font-smoothing: grayscale;
@@ -66,6 +66,10 @@ body {
   font-variation-settings: 'ital' 1;
   background: var(--background);
   color: var(--foreground);
+
+  & * {
+    font-family: 'TT_Neoris';
+  }
 
   &.red {
     --background: var(--red-background);
