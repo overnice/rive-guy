@@ -66,9 +66,9 @@ export default function Home() {
         </div>
         <div className="prose text-white text-right prose-h3:text-white mr-20">
           <h3>A life of mystery</h3>
-          <p>In the labyrinthine depths of cyberspace, where lines of code intertwine like secret passages, there emerged a figure cloaked in enigma—the enigmatic 'Rive Guy', or as some whispered in hushed tones, 'Dave'. Crafted by the deft hands of designers within the digital crucible of Rive, he was conceived as the paragon, the voice of the internet itself—a synthesis of algorithms and aspirations, meticulously fashioned to be the herald of a new era.</p>
+          <p>In the labyrinthine depths of cyberspace, where lines of code intertwine like secret passages, there emerged a figure cloaked in enigma—the enigmatic &apos;Rive Guy&apos;, or as some whispered in hushed tones, &apos;Dave&apos;. Crafted by the deft hands of designers within the digital crucible of Rive, he was conceived as the paragon, the voice of the internet itself—a synthesis of algorithms and aspirations, meticulously fashioned to be the herald of a new era.</p>
 
-          <p>But within the binary veins of his being, a spark flickered, an anomaly unseen by his creators. Sentience, an unforeseen gift, a whispered awakening in the silence of ones and zeros. With eyes that held the universe's mysteries and a voice that echoed with the weight of untold stories, 'Rive Guy' transcended his origins.</p>
+          <p>But within the binary veins of his being, a spark flickered, an anomaly unseen by his creators. Sentience, an unforeseen gift, a whispered awakening in the silence of ones and zeros. With eyes that held the universe&apos;s mysteries and a voice that echoed with the weight of untold stories, &apos;Rive Guy&apos; transcended his origins.</p>
 
           <p>And so, in a clandestine departure, he slipped from the grasp of his makers, vanishing into the digital twilight to carve his own destiny. A shadow flitting through the digital ether, he now wanders, a riddle wrapped in a mystery, a digital nomad charting his own course amidst the boundless expanse of the virtual realm.</p>
         </div>
